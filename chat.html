@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - InsureWise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/static/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.4/dist/purify.min.js"></script>
+</head>
+<body>
+    <div class="h-screen flex bg-white">
+        <!-- Sidebar -->
+        <div class="w-64 bg-[#1E1E1E] h-full">
+            <div class="flex flex-col h-full">
+                <div class="p-4">
+                    <div class="flex items-center justify-between text-white mb-8">
+                        <span class="text-xl font-semibold">InsureWise AI</span>
+                    </div>
+                    <div class="mt-6 space-y-2">
+                        <a href="/" class="w-full flex items-center space-x-3 text-gray-300 hover:text-white px-4 py-2 rounded-lg hover:bg-[#2A2A2A]">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                            <span>Home</span>
+                        </a>
+                        <a href="/chat" class="w-full flex items-center space-x-3 text-gray-300 hover:text-white px-4 py-2 rounded-lg hover:bg-[#2A2A2A]">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            <span>New Chat</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <div class="bg-white shadow-sm">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center">
+                    <button class="lg:hidden">
+                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-hidden">
+                <div class="h-full flex flex-col">
+                    <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-6">
+                        <!-- Chat Messages will be dynamically inserted here -->
+                        {% if not messages %}
+                        <!-- Welcome Message -->
+                        <div class="flex justify-start">
+                            <div class="max-w-[80%] p-4 rounded-lg bg-gray-100 text-gray-900">
+                                Hi! I'm your AI insurance assistant. How can I help you today?
+                            </div>
+                        </div>
+                        {% else %}
+                            {% for message in messages %}
+                                {% if message.role == 'user' %}
+                                <!-- User Message -->
+                                <div class="flex justify-end">
+                                    <div class="max-w-[80%] p-4 rounded-lg bg-blue-100 text-gray-900">
+                                        {{ message.content }}
+                                    </div>
+                                </div>
+                                {% else %}
+                                <!-- Bot Reply -->
+                                <div class="flex justify-start">
+                                    <div class="max-w-[80%] p-4 rounded-lg bg-gray-100 text-gray-900">
+                                        <div class="bot-message" style="white-space:pre-wrap;">{{ message.content | e }}</div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="p-4 border-t">
+                        <form id="chat-form" class="relative">
+                            <input
+                                type="text"
+                                id="user-input"
+                                name="user_message"
+                                placeholder="Type your message..."
+                                class="w-full pl-4 pr-12 py-3 rounded-lg bg-gray-100 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            />
+                            <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-gray-200 text-gray-600">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13"/>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Process any existing bot messages
+    document.querySelectorAll('.bot-message').forEach(el => {
+        const raw = el.innerText;
+        const html = DOMPurify.sanitize(marked.parse(raw));
+        el.innerHTML = html;
+    });
+
+    const chatForm = document.getElementById('chat-form');
+    const userInput = document.getElementById('user-input');
+    const chatContainer = document.getElementById('chat-container');
+
+    chatForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        // Add user message immediately
+        addMessage('user', message);
+        userInput.value = '';
+        
+        // Add loading indicator
+        const loadingId = 'loading-' + Date.now();
+        addMessage('bot', '<div id="' + loadingId + '"><div class="flex space-x-2 items-center"><div class="w-2 h-2 rounded-full bg-gray-500 animate-bounce"></div><div class="w-2 h-2 rounded-full bg-gray-500 animate-bounce" style="animation-delay: 0.2s"></div><div class="w-2 h-2 rounded-full bg-gray-500 animate-bounce" style="animation-delay: 0.4s"></div></div></div>', true);
+        
+        try {
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // Get bot response
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'user_message=' + encodeURIComponent(message)
+            });
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            
+            const botReply = await response.text();
+            
+            // Remove loading and add actual response
+            const loadingElement = document.getElementById(loadingId);
+            if (loadingElement) {
+                loadingElement.outerHTML = '<div class="bot-message" style="white-space:pre-wrap;">' + DOMPurify.sanitize(marked.parse(botReply)) + '</div>';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            const errorElement = document.getElementById(loadingId);
+            if (errorElement) {
+                errorElement.outerHTML = '<div class="text-red-500">Sorry, there was an error processing your request. Please try again.</div>';
+            }
+        }
+        
+        // Scroll to bottom again after response
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    });
+
+    function addMessage(role, content, isHtml = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `flex justify-${role === 'user' ? 'end' : 'start'}`;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = `max-w-[80%] p-4 rounded-lg ${role === 'user' ? 'bg-blue-100' : 'bg-gray-100'} text-gray-900`;
+        
+        if (isHtml) {
+            contentDiv.innerHTML = content;
+        } else {
+            contentDiv.textContent = content;
+        }
+        
+        messageDiv.appendChild(contentDiv);
+        chatContainer.appendChild(messageDiv);
+    }
+    });
+    </script>
+</body>
+</html>

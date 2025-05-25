@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsureWise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/static/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-cover bg-center shadow-md" style="background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=3540'); background-blend-mode: overlay; background-color: rgba(255, 255, 255, 0.9)">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="flex items-center">
+                    <svg class="h-8 w-8 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span class="ml-2 text-xl font-bold text-gray-900">InsureWise</span>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <a href="/about" class="text-gray-600 hover:text-gray-900">About</a>
+                    <a href="/services" class="text-gray-600 hover:text-gray-900">Services</a>
+                    {% if session['user_name'] %}
+                    <!-- Profile Dropdown -->
+                <!-- Profile Dropdown -->
+                <div class="relative">
+                    <button id="profileBtn" class="flex items-center focus:outline-none">
+                        <!-- Simple Profile Icon (e.g., circle icon) -->
+                        <div class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-white">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM12 14c-4.41 0-8 2.69-8 6v2h16v-2c0-3.31-3.59-6-8-6z"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10">
+                        <div class="px-4 py-3 text-gray-800">
+                            Hello, {{ session['user_name'] }}!
+                        </div>
+                        <a href="/logout" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
+
+                    {% else %}
+                    <a href="/login" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="min-h-screen bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=3540'); background-blend-mode: overlay; background-color: rgba(255, 255, 255, 0.2)">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div class="text-center mb-16 backdrop-blur-sm bg-white/30 p-12 rounded-2xl">
+                <h1 class="text-6xl font-bold text-gray-900 mb-6">
+                    InsureWise AI
+                </h1>
+                <p class="text-2xl text-gray-800 max-w-3xl mx-auto mb-12">
+                    Your intelligent insurance assistant
+                </p>
+                
+                <div class="flex flex-col items-center gap-8">
+                    <a href="/chat" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        Start Now
+                    </a>
+                    <p class="text-lg text-gray-800 italic">
+                        "The insurance you do not own will never assure your success."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        <span class="ml-2 text-xl font-bold">InsureWise</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Providing peace of mind through comprehensive insurance solutions since 2025.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                                <rect x="2" y="9" width="4" height="12"/>
+                                <circle cx="4" cy="4" r="2"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="/about" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="/services" class="text-gray-400 hover:text-white transition-colors">Our Services</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>123 Insurance Street</li>
+                        <li>kalanki, NY 10001</li>
+                        <li>Phone: (997+) 123-4567</li>
+                        <li>Email: contact@insurewise.com</li>
+                        <li>Hours: Mon-Fri 9am-6pm EST</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-700 mt-8 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm">
+                        © 2025 InsureWise. All rights reserved.
+                    </p>
+                    <div class="flex space-x-6 mt-4 md:mt-0">
+                        <a href="#" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm">Cookie Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const profileBtn = document.getElementById("profileBtn");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+
+        if (profileBtn) {
+            profileBtn.addEventListener("click", function () {
+                dropdownMenu.classList.toggle("hidden");
+            });
+
+            // Optional: hide dropdown if clicked outside
+            document.addEventListener("click", function (e) {
+                if (!profileBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.add("hidden");
+                }
+            });
+        }
+    </script>
+</body>
+</html>  
